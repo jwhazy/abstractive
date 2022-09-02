@@ -58,7 +58,9 @@
         "height": 600,
         "resizable": true,
         "title": "Abstractive",
-        "width": 800
+        "width": 800,
+        "decorations": false
+
       }
     ]
   }

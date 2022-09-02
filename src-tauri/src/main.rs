@@ -3,9 +3,17 @@
     windows_subsystem = "windows"
 )]
 
+use std::{fs, path::Path};
+
+mod utils;
+
 fn main() {
+    if !Path::exists(&utils::path()) {
+        fs::create_dir(&utils::path()).expect("Create directory failed.");
+    }
+
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![])
+        .invoke_handler(tauri::generate_handler![utils::setup, utils::exists])
         .run(tauri::generate_context!())
         .expect("error while running abstractive");
 }
