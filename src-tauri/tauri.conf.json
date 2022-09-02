@@ -29,7 +29,7 @@
         "icons/icon.ico"
       ],
       "identifier": "dev.jacksta.abstractive",
-      "longDescription": "",
+      "longDescription": "In-development Fortnite mod marketplace.",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
@@ -38,7 +38,7 @@
         "signingIdentity": null
       },
       "resources": [],
-      "shortDescription": "",
+      "shortDescription": "In-development Fortnite mod marketplace.",
       "targets": "all",
       "windows": {
         "certificateThumbprint": null,
