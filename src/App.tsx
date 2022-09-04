@@ -9,6 +9,7 @@ import Welcome from "./pages/welcome";
 import { AppProvider } from "./components/Context";
 import WelcomeClient from "./pages/welcome/client";
 import WelcomeAccount from "./pages/welcome/account";
+import WelcomeSuccess from "./pages/welcome/success";
 
 ReactDOM.createRoot(
   document.getElementById("abstractive") as HTMLElement
@@ -22,6 +23,7 @@ ReactDOM.createRoot(
           <Route path="welcome" element={<Welcome />} />
           <Route path="welcome/client" element={<WelcomeClient />} />
           <Route path="welcome/account" element={<WelcomeAccount />} />
+          <Route path="welcome/success" element={<WelcomeSuccess />} />
         </Routes>
       </AppProvider>
     </BrowserRouter>

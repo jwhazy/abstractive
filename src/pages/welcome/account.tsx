@@ -9,14 +9,14 @@ const WelcomeAccount = () => {
   const navigate = useNavigate();
 
   const login = () => navigate("/");
-  const skip = () => navigate("/");
+  const skip = () => navigate("/welcome/success");
 
   return (
     <div className="flex h-[90vh]">
       <div className="m-auto space-y-4 w-1/2">
         <div className="animate__animated animate__fadeInDown">
           <h1>Abstractive Account</h1>
-          <p>To upload and edit mods, you need to log in.</p>
+          <p>To upload and edit mods, you will need to log in.</p>
         </div>
         <div className="animate__animated animate__fadeInUp">
           <div className="flex space-x-2">

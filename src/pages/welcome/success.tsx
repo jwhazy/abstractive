@@ -1,21 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 
-const Welcome = () => {
+const WelcomeSuccess = () => {
   const navigate = useNavigate();
 
-  const start = () => navigate("/welcome/client");
+  const go = () => navigate("/");
 
   return (
     <div className="flex justify-center h-[90vh]">
       <div className="m-auto text-center space-y-4">
         <div className="animate__animated animate__fadeInDown">
-          <h1>Welcome to Abstractive</h1>
-          <p>We're glad you're here. Let's get started.</p>
+          <h1>Setup complete! 🎉</h1>
+          <p>You can add more clients in the settings.</p>
         </div>
         <div className="animate__animated animate__fadeInUp">
-          <Button onClick={start} className="w-1/2">
-            Start
+          <Button onClick={go} className="w-1/2">
+            Get started
           </Button>
         </div>
       </div>
@@ -23,4 +23,4 @@ const Welcome = () => {
   );
 };
 
-export default Welcome;
+export default WelcomeSuccess;
