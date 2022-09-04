@@ -1,12 +1,23 @@
 import { dialog, invoke } from "@tauri-apps/api";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Combobox } from "@headlessui/react";
 import Button from "../../components/Button";
+import versions from "../../utils/versions";
 
 const WelcomeClient = () => {
   const [clientName, setClientName] = useState("");
   const [clientDirectory, setClientDirectory] = useState("");
+  const [clientVersion, setClientVersion] = useState("");
+  const [query, setQuery] = useState("");
   const [error, setError] = useState("");
+
+  const filteredVersions =
+    query === ""
+      ? null
+      : versions.filter((v) => {
+          return v.toLowerCase().startsWith(query.toLowerCase());
+        });
 
   const navigate = useNavigate();
 
@@ -23,7 +34,12 @@ const WelcomeClient = () => {
       return;
     }
 
-    navigate("/welcome/account");
+    invoke("add_client", {
+      name: clientName,
+      directory: clientDirectory,
+      version: clientVersion,
+      id: crypto.randomUUID(),
+    });
   };
 
   const getDirectory = () => {
@@ -54,6 +70,27 @@ const WelcomeClient = () => {
             }}
             className={`py-2 px-3 w-full focus:shadow-xl transition h-10 rounded-xl bg-zinc-800 border border-zinc-600 text-white focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent`}
           />
+          <div className="flex space-y-2 flex-col">
+            <Combobox value={clientVersion} onChange={setClientVersion}>
+              <Combobox.Input
+                placeholder="Client version (e.g. 8.51-CL-6165369)"
+                className={`py-2 px-3 w-full focus:shadow-xl transition h-10 rounded-xl bg-zinc-800 border border-zinc-600 text-white focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent`}
+                onChange={(event) => setQuery(event.target.value)}
+              />
+              <Combobox.Options
+                className={
+                  "flex rounded-xl flex-col transition bg-zinc-800 border border-zinc-600 text-white focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
+                }
+              >
+                {filteredVersions?.slice(0, 3).map((v) => (
+                  <Combobox.Option key={v} value={v} className="py-2 px-3">
+                    {v}
+                  </Combobox.Option>
+                ))}
+              </Combobox.Options>
+            </Combobox>
+          </div>
+
           <div className="flex space-x-2">
             <input
               id="directory"
@@ -71,6 +108,7 @@ const WelcomeClient = () => {
               ...
             </Button>
           </div>
+
           {error && <p className="text-red-400">{error}</p>}
           <Button className="ml-0" onClick={addClient}>
             Add client
