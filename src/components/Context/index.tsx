@@ -1,42 +1,63 @@
 /* eslint-disable no-unused-vars */
 import { createContext, ReactNode, useMemo, useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api";
-import { UpdateManifest } from "@tauri-apps/api/updater";
 import { useNavigate } from "react-router-dom";
+import { Client } from "../../types/Client";
+import { Config } from "../../types/Config";
 
 interface DefaultContext {
   setup: boolean | undefined;
   setSetup: (setup: boolean) => void;
+  clients: Client[];
+  setClients: (clients: Client[]) => void;
+  activeClient: Client | undefined;
+  setActiveClient: (client: Client) => void;
 }
 
-const AppContext = createContext<Partial<DefaultContext>>({
-  setup: undefined,
-});
+const AppContext = createContext<Partial<DefaultContext>>({});
 
 type Props = {
   children: ReactNode;
 };
 
 function AppProvider({ children }: Props) {
-  const [setup, setSetup] = useState(false);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [setup, setSetup] = useState<boolean>(false);
+  const [activeClient, setActiveClient] = useState<Client>();
 
   const navigate = useNavigate();
 
+  const start = async () => {
+    const isSetup = await invoke("setup");
+    if (!isSetup) navigate("/welcome");
+
+    const config: Config = JSON.parse(await invoke("get_config"));
+    if (!config) throw new Error("Config is undefined");
+
+    const active: Client | undefined = config.clients.find(
+      (active) => active.id === config.active
+    );
+
+    setClients(config.clients);
+    setActiveClient(active);
+  };
+
   const value = useMemo(
     () => ({
+      clients,
+      setClients,
+      activeClient,
       setup,
       setSetup,
+      setActiveClient,
     }),
-    [setup]
+    [clients, activeClient, setup]
   );
 
   useEffect(() => {
-    invoke("setup").then((m) => {
-      if (!m) navigate("/welcome");
-    });
-  }, [setSetup]);
+    start();
+  }, []);
 
-  if (setup === undefined) return <h1>Loading</h1>;
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
 

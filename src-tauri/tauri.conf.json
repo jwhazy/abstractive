@@ -55,10 +55,10 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 660,
         "resizable": true,
         "title": "Abstractive",
-        "width": 800,
+        "width": 1240,
         "decorations": false
 
       }

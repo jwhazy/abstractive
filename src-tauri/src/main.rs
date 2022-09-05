@@ -13,7 +13,13 @@ fn main() {
     }
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![utils::setup, utils::exists])
+        .invoke_handler(tauri::generate_handler![
+            utils::setup,
+            utils::exists,
+            utils::add_client,
+            utils::get_config,
+            utils::set_active,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running abstractive");
 }

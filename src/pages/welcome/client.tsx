@@ -22,24 +22,19 @@ const WelcomeClient = () => {
   const navigate = useNavigate();
 
   const addClient = async () => {
-    if (!clientName || !clientDirectory) {
-      setError("Make sure you have filled out all fields.");
-      return;
-    }
+    if (!clientName || !clientDirectory)
+      return setError("Make sure you have filled out all fields.");
 
     const exists = await invoke("exists", { path: clientDirectory });
 
-    if (!exists) {
-      setError("Directory does not exist.");
-      return;
-    }
+    if (!exists) return setError("Directory does not exist.");
 
     invoke("add_client", {
       name: clientName,
       directory: clientDirectory,
       version: clientVersion,
       id: crypto.randomUUID(),
-    });
+    }).then(() => navigate("/welcome/account"));
   };
 
   const getDirectory = () => {
