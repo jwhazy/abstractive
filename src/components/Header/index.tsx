@@ -1,19 +1,23 @@
-import closeIcon from "../../icons/close.svg";
 import { appWindow } from "@tauri-apps/api/window";
 import Button from "./Button";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const close = () => appWindow.close();
+
+  const navigate = useNavigate();
 
   const minimize = () => appWindow.minimize();
 
   return (
     <div
-      className="flex justify-between pl-4 h-7 fixed w-full animate__animated animate__fadeInDown"
+      className="flex justify-between pl-4 h-7 sticky w-full animate__animated animate__fadeInDown"
       data-tauri-drag-region
     >
       <div>
-        <h4 className="font-black">ABSTRACTIVE</h4>
+        <h4 className="font-black" onClick={() => navigate("/")}>
+          ABSTRACTIVE
+        </h4>
       </div>
       <div className="flex flex-row-reverse items-center text-center">
         <Button onClick={close}>

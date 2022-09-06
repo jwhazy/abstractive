@@ -4,6 +4,8 @@ import { invoke } from "@tauri-apps/api";
 import { useNavigate } from "react-router-dom";
 import { Client } from "../../types/Client";
 import { Config } from "../../types/Config";
+import { mods as localMods } from "../../utils/mods";
+import { Mod } from "../../types/Mod";
 
 interface DefaultContext {
   setup: boolean | undefined;
@@ -12,6 +14,8 @@ interface DefaultContext {
   setClients: (clients: Client[]) => void;
   activeClient: Client | undefined;
   setActiveClient: (client: Client) => void;
+  mods: Mod[];
+  setMods: (mods: Mod[]) => void;
 }
 
 const AppContext = createContext<Partial<DefaultContext>>({});
@@ -23,6 +27,7 @@ type Props = {
 function AppProvider({ children }: Props) {
   const [clients, setClients] = useState<Client[]>([]);
   const [setup, setSetup] = useState<boolean>(false);
+  const [mods, setMods] = useState<Mod[]>(localMods);
   const [activeClient, setActiveClient] = useState<Client>();
 
   const navigate = useNavigate();
@@ -47,9 +52,11 @@ function AppProvider({ children }: Props) {
       clients,
       setClients,
       activeClient,
+      setActiveClient,
       setup,
       setSetup,
-      setActiveClient,
+      mods,
+      setMods,
     }),
     [clients, activeClient, setup]
   );

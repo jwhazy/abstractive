@@ -1,36 +1,105 @@
-import { useContext } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import { Fragment, useContext } from "react";
 import { AppContext } from "../components/Context";
+import ModLarge from "../components/ModLarge";
+import clsxm from "../utils/clsxm";
+import { ChevronDownIcon, PlusIcon } from "@heroicons/react/20/solid";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
-  const { clients, activeClient } = useContext(AppContext);
+  const { clients, activeClient, mods, setActiveClient } =
+    useContext(AppContext);
+
+  const navigate = useNavigate();
+
   return (
-    <div className="flex h-[85vh] text-center">
-      <div className="m-auto">
+    <div className="flex flex-row p-6 justify-between">
+      <div className="flex flex-col">
         <div>
-          <h1>Abstractive</h1>
-          <p>In-development Fortnite mod marketplace.</p>
+          <h3>Mods</h3>
+          <div className="flex flex-wrap">
+            <p>
+              You currently have{" "}
+              {activeClient?.mods
+                ? activeClient?.mods.length === 1
+                  ? "1 mod"
+                  : activeClient?.mods.length + " mods"
+                : 0 + "mods"}{" "}
+              installed into {activeClient?.name}.
+            </p>
+
+            {activeClient?.mods
+              ? activeClient?.mods.map((mod) => {
+                  return <ModLarge key={mod.id} mod={mod} />;
+                })
+              : "No mods installed."}
+          </div>
         </div>
-        <div>
-          <h1>Clients added</h1>
-          {clients?.map((client) => (
-            <div
-              key={client.id}
-              className={activeClient?.id === client.id ? "bg-green-500" : ""}
-            >
-              <h1>{client.name}</h1>
-              <p>{client.directory}</p>
-              <p>{client.id}</p>
-              <p>{client.version}</p>
-              <p>Mods</p>
-              <p>
-                {client?.mods.map((mod) => (
-                  <p>{mod.id}</p>
-                ))}
-              </p>
-            </div>
-          ))}
+        <div className="my-4">
+          <h3>All mods</h3>
+          <div className="flex flex-wrap">
+            {mods?.map((mod) => {
+              return <ModLarge key={mod.id} mod={mod} />;
+            })}
+          </div>
         </div>
       </div>
+      <Menu as="div" className="relative inline-block text-left">
+        <div>
+          <Menu.Button className="flex rounded-xl border border-gray-700 px-4 py-2 items-center space-x-2 h-max cursor-pointer">
+            {activeClient?.name}
+            <ChevronDownIcon
+              className="-mr-1 ml-2 h-5 w-5"
+              aria-hidden="true"
+            />
+          </Menu.Button>
+        </div>
+
+        <Transition
+          as={Fragment}
+          enter="transition ease-out duration-100"
+          enterFrom="transform opacity-0 scale-95"
+          enterTo="transform opacity-100 scale-100"
+          leave="transition ease-in duration-75"
+          leaveFrom="transform opacity-100 scale-100"
+          leaveTo="transform opacity-0 scale-95"
+        >
+          <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none border border-gray-700">
+            <div className="py-1">
+              {clients?.map((client) => (
+                <Menu.Item>
+                  {({ active }) => (
+                    <a
+                      href="#"
+                      onClick={() => setActiveClient?.(client)}
+                      className={clsxm(
+                        active ? " bg-black bg-opacity-20" : "text-white",
+                        "block px-4 py-2 text-sm"
+                      )}
+                    >
+                      {client.name}
+                    </a>
+                  )}
+                </Menu.Item>
+              ))}
+            </div>
+            <Menu.Item>
+              {({ active }) => (
+                <a
+                  href="#"
+                  onClick={() => navigate("/add/client")}
+                  className={clsxm(
+                    active ? " bg-black bg-opacity-20" : "text-white",
+                    "block px-4 py-2 text-sm"
+                  )}
+                >
+                  Add client
+                </a>
+              )}
+            </Menu.Item>
+          </Menu.Items>
+        </Transition>
+      </Menu>
     </div>
   );
 }

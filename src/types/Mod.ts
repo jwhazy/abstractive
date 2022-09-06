@@ -7,7 +7,7 @@ export type Mod = {
   shortDescription?: String;
   longDescription?: String;
   versions?: Version[];
-  content?: Content[];
+  content?: Content;
   author?: String;
   contributors?: String[];
   repository?: String;
