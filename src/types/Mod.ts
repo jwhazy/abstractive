@@ -1,14 +1,20 @@
 import { Content } from "./Content";
 import { Version } from "./Version";
+import { File } from "./File";
 
 export type Mod = {
   id: string;
-  name?: String;
-  shortDescription?: String;
-  longDescription?: String;
-  versions?: Version[];
+  version: string;
+  name?: string;
+  shortDescription?: string;
+  longDescription?: string;
+  clients?: Version[];
   content?: Content;
-  author?: String;
-  contributors?: String[];
-  repository?: String;
+  files?: File[];
+  releaseDate?: string;
+  lastUpdated?: string;
+  previousVersions?: string[];
+  author?: string;
+  contributors?: string[];
+  repository?: string;
 };

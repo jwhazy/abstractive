@@ -3,8 +3,8 @@ import { Version } from "./Version";
 
 export type Client = {
   id: string;
-  name: String;
-  directory: String;
+  name: string;
+  directory: string;
   version: Version;
   mods: Mod[];
 };
