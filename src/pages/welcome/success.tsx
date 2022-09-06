@@ -4,7 +4,7 @@ import Button from "../../components/Button";
 const WelcomeSuccess = () => {
   const navigate = useNavigate();
 
-  const go = () => navigate("/");
+  const go = () => (window.location.href = "/");
 
   return (
     <div className="flex justify-center h-[90vh]">

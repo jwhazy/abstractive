@@ -5,6 +5,7 @@ import ModLarge from "../components/ModLarge";
 import clsxm from "../utils/clsxm";
 import { ChevronDownIcon, PlusIcon } from "@heroicons/react/20/solid";
 import { useNavigate } from "react-router-dom";
+import { invoke } from "@tauri-apps/api";
 
 function Home() {
   const { clients, activeClient, mods, setActiveClient } =
@@ -13,21 +14,20 @@ function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-row p-6 justify-between">
-      <div className="flex flex-col">
-        <div>
+    <div className="flex flex-row p-6 justify-between pt-12">
+      <div className="flex flex-col animate__animated animate__fadeIn">
+        <div className="">
           <h3>Mods</h3>
+          <p>
+            You currently have{" "}
+            {activeClient?.mods
+              ? activeClient?.mods.length === 1
+                ? "1 mod"
+                : activeClient?.mods.length + " mods"
+              : 0 + "mods"}{" "}
+            installed into {activeClient?.name}.
+          </p>
           <div className="flex flex-wrap">
-            <p>
-              You currently have{" "}
-              {activeClient?.mods
-                ? activeClient?.mods.length === 1
-                  ? "1 mod"
-                  : activeClient?.mods.length + " mods"
-                : 0 + "mods"}{" "}
-              installed into {activeClient?.name}.
-            </p>
-
             {activeClient?.mods
               ? activeClient?.mods.map((mod) => {
                   return <ModLarge key={mod.id} mod={mod} />;
@@ -39,12 +39,17 @@ function Home() {
           <h3>All mods</h3>
           <div className="flex flex-wrap">
             {mods?.map((mod) => {
-              return <ModLarge key={mod.id} mod={mod} />;
+              if (!activeClient?.mods.find((m) => m.id === mod.id)) {
+                return <ModLarge key={mod.id} mod={mod} />;
+              }
             })}
           </div>
         </div>
       </div>
-      <Menu as="div" className="relative inline-block text-left">
+      <Menu
+        as="div"
+        className="relative inline-block text-left animate__animated animate__fadeIn"
+      >
         <div>
           <Menu.Button className="flex rounded-xl border border-gray-700 px-4 py-2 items-center space-x-2 h-max cursor-pointer">
             {activeClient?.name}
@@ -65,28 +70,36 @@ function Home() {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none border border-gray-700">
-            <div className="py-1">
-              {clients?.map((client) => (
-                <Menu.Item>
-                  {({ active }) => (
-                    <a
-                      href="#"
-                      onClick={() => setActiveClient?.(client)}
-                      className={clsxm(
-                        active ? " bg-black bg-opacity-20" : "text-white",
-                        "block px-4 py-2 text-sm"
-                      )}
-                    >
-                      {client.name}
-                    </a>
-                  )}
-                </Menu.Item>
-              ))}
-            </div>
+            {clients
+              ? Object.values(clients).map((client) => (
+                  <Menu.Item>
+                    {({ active }) => (
+                      <div className="py-1">
+                        <a
+                          href="#"
+                          key={client.name}
+                          onClick={() => {
+                            setActiveClient?.(client);
+                            invoke("set_active", { id: client.id });
+                          }}
+                          className={clsxm(
+                            active ? " bg-black bg-opacity-20" : "text-white",
+                            "block px-4 py-2 text-sm"
+                          )}
+                        >
+                          {client.name}
+                        </a>
+                      </div>
+                    )}
+                  </Menu.Item>
+                ))
+              : null}
+
             <Menu.Item>
               {({ active }) => (
                 <a
                   href="#"
+                  key={0}
                   onClick={() => navigate("/add/client")}
                   className={clsxm(
                     active ? " bg-black bg-opacity-20" : "text-white",

@@ -1,3 +1,9 @@
+import {
+  ArrowSmallDownIcon,
+  ArrowSmallLeftIcon,
+  BackspaceIcon,
+} from "@heroicons/react/20/solid";
+import { invoke } from "@tauri-apps/api";
 import { open } from "@tauri-apps/api/shell";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -7,16 +13,33 @@ import { Mod } from "../types/Mod";
 import clsxm from "../utils/clsxm";
 
 const InstallMod = () => {
-  const { mods } = useContext(AppContext);
+  const { mods, activeClient } = useContext(AppContext);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [activeMod, setActiveMod] = useState<Mod>();
 
   const navigate = useNavigate();
 
+  const goBack = () => navigate("/");
   const openRepo = () => open(activeMod?.repository || "");
 
-  const id = searchParams.get("id");
+  const install = async () => {
+    console.log(activeClient?.id, activeMod?.id);
+    await invoke("install_mod", {
+      modId: activeMod?.id,
+      clientId: activeClient?.id,
+    });
+    window.location.href = "/";
+  };
+
+  const uninstall = async () => {
+    console.log(activeClient?.id, activeMod?.id);
+    await invoke("uninstall_mod", {
+      modId: activeMod?.id,
+      clientId: activeClient?.id,
+    });
+    window.location.href = "/";
+  };
 
   const findMod = () => {
     const mod = mods?.find((m) => m.id === searchParams.get("id"));
@@ -28,12 +51,16 @@ const InstallMod = () => {
     findMod();
   });
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate__animated animate__fadeInLeft">
       <img
         src={activeMod?.content?.banner}
-        className={"w-full h-[256px] object-cover object-center"}
+        className={"w-full h-[300px] object-cover object-center"}
       />
-      <div className="flex justify-center space-x-8 w-2/3">
+
+      <div className="flex justify-center space-x-8 w-1/2">
+        <div onClick={goBack}>
+          <ArrowSmallLeftIcon className="w-8 h-8" />
+        </div>
         <img src={activeMod?.content?.icon} className="rounded-xl w-32 h-32" />
         <div className="flex flex-col justify-around">
           <div>
@@ -43,13 +70,26 @@ const InstallMod = () => {
             </p>
           </div>
           <div className="space-x-4">
-            <Button className="m-0">Install</Button>
+            {!activeClient?.mods?.find((m) => m.id === activeMod?.id) ? (
+              <Button className="m-0" onClick={install}>
+                Install
+              </Button>
+            ) : (
+              <Button className="m-0" onClick={uninstall}>
+                Uninstall
+              </Button>
+            )}
+            {!activeClient?.mods?.find((m) => m.id === activeMod?.id) ? (
+              <Button className="m-0">Report</Button>
+            ) : (
+              <Button className="m-0">Settings</Button>
+            )}
+
             {activeMod?.repository ? (
               <Button className="m-0" onClick={openRepo}>
                 Source code
               </Button>
             ) : null}
-            <Button className="m-0">Report</Button>
           </div>
         </div>
       </div>
@@ -98,20 +138,6 @@ const InstallMod = () => {
         </div>
       </div>
     </div>
-    // <div className={clsxm(`flex flex-col space-y-8 p-10 bg-[black]`)}>
-    //   <div className="flex flex-col-reverse">
-    //     <h1>{activeMod?.name}</h1>
-    //     <p className="text-gray-200 tracking-widest">{activeMod?.author}</p>
-    //   </div>
-    //   <div>
-    //     <p>{activeMod?.longDescription}</p>
-    //   </div>
-    //   <div className="flex flex-wrap">
-    //     {activeMod?.content?.media.map((media) => {
-    //       return <img src={media} className={"w-[512px] p-2"} />;
-    //     })}
-    //   </div>
-    // </div>
   );
 };
 

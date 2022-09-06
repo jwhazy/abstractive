@@ -24,7 +24,7 @@ const AddClient = () => {
   const goBack = () => navigate("/");
 
   const addClient = async () => {
-    if (!clientName || !clientDirectory)
+    if (!clientName || !clientDirectory || !clientVersion)
       return setError("Make sure you have filled out all fields.");
 
     const exists = await invoke("exists", { path: clientDirectory });
@@ -36,7 +36,7 @@ const AddClient = () => {
       directory: clientDirectory,
       version: clientVersion,
       id: crypto.randomUUID(),
-    }).then(() => navigate("/welcome/account"));
+    }).then(() => (window.location.href = "/"));
   };
 
   const getDirectory = () => {

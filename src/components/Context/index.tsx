@@ -4,14 +4,14 @@ import { invoke } from "@tauri-apps/api";
 import { useNavigate } from "react-router-dom";
 import { Client } from "../../types/Client";
 import { Config } from "../../types/Config";
-import { mods as localMods } from "../../utils/mods";
 import { Mod } from "../../types/Mod";
+import Spinner from "../Spinner";
 
 interface DefaultContext {
   setup: boolean | undefined;
   setSetup: (setup: boolean) => void;
-  clients: Client[];
-  setClients: (clients: Client[]) => void;
+  clients: Record<string, Client>;
+  setClients: (clients: Record<string, Client>) => void;
   activeClient: Client | undefined;
   setActiveClient: (client: Client) => void;
   mods: Mod[];
@@ -25,26 +25,36 @@ type Props = {
 };
 
 function AppProvider({ children }: Props) {
-  const [clients, setClients] = useState<Client[]>([]);
+  const [clients, setClients] = useState<Record<string, Client>>();
   const [setup, setSetup] = useState<boolean>(false);
-  const [mods, setMods] = useState<Mod[]>(localMods);
+  const [mods, setMods] = useState<Mod[]>();
   const [activeClient, setActiveClient] = useState<Client>();
+
+  const [loading, setLoading] = useState<boolean>(true);
 
   const navigate = useNavigate();
 
   const start = async () => {
     const isSetup = await invoke("setup");
-    if (!isSetup) navigate("/welcome");
+    if (!isSetup) {
+      navigate("/welcome");
+      return setLoading(false);
+    }
 
     const config: Config = JSON.parse(await invoke("get_config"));
     if (!config) throw new Error("Config is undefined");
 
-    const active: Client | undefined = config.clients.find(
+    const active: Client | undefined = Object.values(config.clients).find(
       (active) => active.id === config.active
     );
 
+    const workerMods: Mod[] = JSON.parse(await invoke("get_mods"));
+
+    setMods(workerMods);
     setClients(config.clients);
     setActiveClient(active);
+
+    setLoading(false);
   };
 
   const value = useMemo(
@@ -65,7 +75,16 @@ function AppProvider({ children }: Props) {
     start();
   }, []);
 
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+  if (loading) {
+    return (
+      <div className="flex h-[90vh] justify-center">
+        <div className="m-auto">
+          <Spinner />
+        </div>
+      </div>
+    );
+  } else
+    return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
 
 export { AppProvider, AppContext };
