@@ -11,7 +11,7 @@ const Header = () => {
 
   return (
     <div
-      className="flex justify-between pl-4 h-7 fixed z-50 bg-black bg-opacity-20 backdrop-blur-xl rounded drop-shadow-lg w-full animate__animated animate__fadeInDown"
+      className="flex justify-between pl-4 h-7 fixed z-50 bg-zinc-900 bg-opacity-20 backdrop-blur-xl rounded drop-shadow-lg w-full animate__animated animate__fadeInDown"
       data-tauri-drag-region
     >
       <div>

@@ -6,6 +6,7 @@ import { Client } from "../../types/Client";
 import { Config } from "../../types/Config";
 import { Mod } from "../../types/Mod";
 import Spinner from "../Spinner";
+import { Account } from "../../types/Account";
 
 interface DefaultContext {
   setup: boolean | undefined;
@@ -29,6 +30,7 @@ function AppProvider({ children }: Props) {
   const [setup, setSetup] = useState<boolean>(false);
   const [mods, setMods] = useState<Mod[]>();
   const [activeClient, setActiveClient] = useState<Client>();
+  const [account, setAccount] = useState<Account>();
 
   const [loading, setLoading] = useState<boolean>(true);
 

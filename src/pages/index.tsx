@@ -72,12 +72,11 @@ function Home() {
           <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none border border-gray-700">
             {clients
               ? Object.values(clients).map((client) => (
-                  <Menu.Item>
+                  <Menu.Item key={client.id}>
                     {({ active }) => (
                       <div className="py-1">
                         <a
                           href="#"
-                          key={client.name}
                           onClick={() => {
                             setActiveClient?.(client);
                             invoke("set_active", { id: client.id });
