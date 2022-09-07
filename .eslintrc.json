@@ -1,36 +1,32 @@
 {
   "env": {
     "browser": true,
-    "es2021": true
+    "es6": true
   },
-  "extends": ["plugin:react/recommended", "airbnb"],
-  "parser": "@typescript-eslint/parser",
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": 14,
+    "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint", "prettier"],
+  "extends": ["airbnb", "plugin:jsx-a11y/recommended", "prettier"],
+  "plugins": ["react", "jsx-a11y", "prettier"],
   "rules": {
-    "import/no-extraneous-dependencies": "off",
     "react/destructuring-assignment": "off",
     "jsx-a11y/no-noninteractive-element-interactions": "off",
     "jsx-a11y/click-events-have-key-events": "off",
     "react/no-unused-prop-types": "off",
     "jsx-a11y/anchor-is-valid": "off",
+    "import/no-extraneous-dependencies": "off",
     "react/state-in-constructor": "off",
     "react/require-default-props": "off",
     "jsx-a11y/click-events-have-key-event": "off",
     "jsx-a11y/no-static-element-interactions": "off",
-    "jsx-quotes": "off",
-    "react/no-unescaped-entities": "off",
-    "quotes": ["error", "double"],
-    "import/extensions": "off",
-    "import/no-unresolved": "off",
-    "react/jsx-uses-react": "off",
-    "react/react-in-jsx-scope": "off",
     "semi": 0,
     "react/jsx-filename-extension": [
       1,
