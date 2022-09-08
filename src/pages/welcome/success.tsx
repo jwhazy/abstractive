@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom";
-import Button from "../../components/Button";
+import { useNavigate } from 'react-router-dom';
+import Button from '../../components/Button';
 
-const WelcomeSuccess = () => {
+function WelcomeSuccess() {
   const navigate = useNavigate();
 
-  const go = () => (window.location.href = "/");
+  const go = () => (window.location.href = '/');
 
   return (
     <div className="flex justify-center h-[90vh]">
@@ -21,6 +21,6 @@ const WelcomeSuccess = () => {
       </div>
     </div>
   );
-};
+}
 
 export default WelcomeSuccess;

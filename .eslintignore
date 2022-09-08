@@ -1,2 +1,6 @@
 *.css
 *.svg
+src-tauri/
+node_modules/
+worker/
+dist/

@@ -1,4 +1,4 @@
-import { mods } from "../../src/utils/mods";
+import { mods } from '../../src/utils/mods';
 
 export interface Env {}
 
@@ -10,10 +10,10 @@ export default {
   ): Promise<Response> {
     const { pathname } = new URL(request.url);
 
-    if (pathname.startsWith("/v1/mods")) {
+    if (pathname.startsWith('/v1/mods')) {
       return new Response(JSON.stringify(mods));
     }
 
-    return Response.redirect("https://jacksta.dev/", 302);
+    return Response.redirect('https://jacksta.dev/', 302);
   },
 };

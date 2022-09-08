@@ -1,12 +1,12 @@
-import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Mod, Mod as ModType } from "../types/Mod";
-import { AppContext } from "./Context";
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Mod, Mod as ModType } from '../types/Mod';
+import { AppContext } from './Context';
 
 type Props = {
   mod: ModType;
 };
-const ModLarge = (props: Props) => {
+function ModLarge(props: Props) {
   const { mods } = useContext(AppContext);
 
   const [modData, setModData] = useState<Mod>();
@@ -14,7 +14,7 @@ const ModLarge = (props: Props) => {
 
   useEffect(() => {
     setModData(mods?.find((m) => m.id === props.mod?.id));
-  });
+  }, [mods, props.mod.id]);
 
   return (
     <div
@@ -32,6 +32,6 @@ const ModLarge = (props: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default ModLarge;

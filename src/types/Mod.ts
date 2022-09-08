@@ -1,6 +1,6 @@
-import { Content } from "./Content";
-import { Version } from "./Version";
-import { File } from "./File";
+import { Content } from './Content';
+import { Version } from './Version';
+import { File } from './File';
 
 export type Mod = {
   id: string;

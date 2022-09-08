@@ -1,15 +1,11 @@
-import { dialog, invoke } from "@tauri-apps/api";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Button from "../../components/Button";
+import { useNavigate } from 'react-router-dom';
+import Button from '../../components/Button';
 
-const WelcomeAccount = () => {
-  const [error, setError] = useState("");
-
+function WelcomeAccount() {
   const navigate = useNavigate();
 
-  const login = () => navigate("/");
-  const skip = () => navigate("/welcome/success");
+  const login = () => navigate('/');
+  const skip = () => navigate('/welcome/success');
 
   return (
     <div className="flex h-[90vh]">
@@ -25,11 +21,10 @@ const WelcomeAccount = () => {
             </Button>
             <Button onClick={skip}>Skip</Button>
           </div>
-          {error && <p className="text-red-400">{error}</p>}
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default WelcomeAccount;

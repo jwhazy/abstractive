@@ -1,5 +1,5 @@
-import { Mod } from "./Mod";
-import { Version } from "./Version";
+import { Mod } from './Mod';
+import { Version } from './Version';
 
 export type Client = {
   id: string;

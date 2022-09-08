@@ -16,6 +16,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "commitlint.config.cjs"],
+  "include": ["src", "commitlint.config.cjs", ".eslintrc.cjs"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

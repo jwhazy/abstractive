@@ -1,8 +1,8 @@
-import { appWindow } from "@tauri-apps/api/window";
-import Button from "./Button";
-import { useNavigate } from "react-router-dom";
+import { appWindow } from '@tauri-apps/api/window';
+import { useNavigate } from 'react-router-dom';
+import Button from './Button';
 
-const Header = () => {
+function Header() {
   const close = () => appWindow.close();
 
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ const Header = () => {
       data-tauri-drag-region
     >
       <div>
-        <h4 className="font-black" onClick={() => navigate("/")}>
+        <h4 className="font-black" onClick={() => navigate('/')}>
           ABSTRACTIVE
         </h4>
       </div>
@@ -67,6 +67,6 @@ const Header = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Header;

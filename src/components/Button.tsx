@@ -1,6 +1,4 @@
-import { useNavigate } from "react-router-dom";
-
-import clsxm from "../utils/clsxm";
+import clsxm from '../utils/clsxm';
 
 export type Props = {
   onClick?: () => void;
@@ -8,11 +6,9 @@ export type Props = {
   children: React.ReactNode;
 };
 
-const Button = (props: Props) => {
-  const navigate = useNavigate();
-
+function Button(props: Props) {
   const className = clsxm(
-    "ring ring-1 ring-zinc-600 text-white bg-gray-500 hover:text-white cursor-pointer mx-2 my-1 rounded-xl px-4 py-2 font-normal bg-opacity-10 hover:bg-opacity-70 shadow-xl transition",
+    'ring ring-1 ring-zinc-600 text-white bg-gray-500 hover:text-white cursor-pointer mx-2 my-1 rounded-xl px-4 py-2 font-normal bg-opacity-10 hover:bg-opacity-70 shadow-xl transition',
     props.className
   );
 
@@ -21,5 +17,5 @@ const Button = (props: Props) => {
       {props.children}
     </button>
   );
-};
+}
 export default Button;

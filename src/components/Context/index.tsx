@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
-import { createContext, ReactNode, useMemo, useState, useEffect } from "react";
-import { invoke } from "@tauri-apps/api";
-import { useNavigate } from "react-router-dom";
-import { Client } from "../../types/Client";
-import { Config } from "../../types/Config";
-import { Mod } from "../../types/Mod";
-import Spinner from "../Spinner";
-import { Account } from "../../types/Account";
+import { createContext, ReactNode, useMemo, useState, useEffect } from 'react';
+import { invoke } from '@tauri-apps/api';
+import { useNavigate } from 'react-router-dom';
+import { Client } from '../../types/Client';
+import { Config } from '../../types/Config';
+import { Mod } from '../../types/Mod';
+import Spinner from '../Spinner';
+import { Account } from '../../types/Account';
 
 interface DefaultContext {
   setup: boolean | undefined;
@@ -37,20 +37,20 @@ function AppProvider({ children }: Props) {
   const navigate = useNavigate();
 
   const start = async () => {
-    const isSetup = await invoke("setup");
+    const isSetup = await invoke('setup');
     if (!isSetup) {
-      navigate("/welcome");
+      navigate('/welcome');
       return setLoading(false);
     }
 
-    const config: Config = JSON.parse(await invoke("get_config"));
-    if (!config) throw new Error("Config is undefined");
+    const config: Config = JSON.parse(await invoke('get_config'));
+    if (!config) throw new Error('Config is undefined');
 
     const active: Client | undefined = Object.values(config.clients).find(
-      (active) => active.id === config.active
+      (a) => a.id === config.active
     );
 
-    const workerMods: Mod[] = JSON.parse(await invoke("get_mods"));
+    const workerMods: Mod[] = JSON.parse(await invoke('get_mods'));
 
     setMods(workerMods);
     setClients(config.clients);
@@ -70,12 +70,12 @@ function AppProvider({ children }: Props) {
       mods,
       setMods,
     }),
-    [clients, activeClient, setup]
+    [clients, activeClient, setup, mods]
   );
 
   useEffect(() => {
     start();
-  }, []);
+  });
 
   if (loading) {
     return (
@@ -85,8 +85,8 @@ function AppProvider({ children }: Props) {
         </div>
       </div>
     );
-  } else
-    return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+  }
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
 
 export { AppProvider, AppContext };

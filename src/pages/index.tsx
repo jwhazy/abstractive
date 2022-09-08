@@ -1,11 +1,11 @@
-import { Menu, Transition } from "@headlessui/react";
-import { Fragment, useContext } from "react";
-import { AppContext } from "../components/Context";
-import ModLarge from "../components/ModLarge";
-import clsxm from "../utils/clsxm";
-import { ChevronDownIcon, PlusIcon } from "@heroicons/react/20/solid";
-import { useNavigate } from "react-router-dom";
-import { invoke } from "@tauri-apps/api";
+import { Menu, Transition } from '@headlessui/react';
+import { Fragment, useContext } from 'react';
+import { ChevronDownIcon, PlusIcon } from '@heroicons/react/20/solid';
+import { useNavigate } from 'react-router-dom';
+import { invoke } from '@tauri-apps/api';
+import { AppContext } from '../components/Context';
+import ModLarge from '../components/ModLarge';
+import clsxm from '../utils/clsxm';
 
 function Home() {
   const { clients, activeClient, mods, setActiveClient } =
@@ -19,20 +19,20 @@ function Home() {
         <div className="">
           <h3>Mods</h3>
           <p>
-            You currently have{" "}
+            You currently have{' '}
             {activeClient?.mods
               ? activeClient?.mods.length === 1
-                ? "1 mod"
-                : activeClient?.mods.length + " mods"
-              : 0 + "mods"}{" "}
+                ? '1 mod'
+                : `${activeClient?.mods.length} mods`
+              : `${0}mods`}{' '}
             installed into {activeClient?.name}.
           </p>
           <div className="flex flex-wrap">
             {activeClient?.mods
-              ? activeClient?.mods.map((mod) => {
-                  return <ModLarge key={mod.id} mod={mod} />;
-                })
-              : "No mods installed."}
+              ? activeClient?.mods.map((mod) => (
+                  <ModLarge key={mod.id} mod={mod} />
+                ))
+              : 'No mods installed.'}
           </div>
         </div>
         <div className="my-4">
@@ -79,11 +79,11 @@ function Home() {
                           href="#"
                           onClick={() => {
                             setActiveClient?.(client);
-                            invoke("set_active", { id: client.id });
+                            invoke('set_active', { id: client.id });
                           }}
                           className={clsxm(
-                            active ? " bg-black bg-opacity-20" : "text-white",
-                            "block px-4 py-2 text-sm"
+                            active ? ' bg-black bg-opacity-20' : 'text-white',
+                            'block px-4 py-2 text-sm'
                           )}
                         >
                           {client.name}
@@ -99,10 +99,10 @@ function Home() {
                 <a
                   href="#"
                   key={0}
-                  onClick={() => navigate("/add/client")}
+                  onClick={() => navigate('/add/client')}
                   className={clsxm(
-                    active ? " bg-black bg-opacity-20" : "text-white",
-                    "block px-4 py-2 text-sm"
+                    active ? ' bg-black bg-opacity-20' : 'text-white',
+                    'block px-4 py-2 text-sm'
                   )}
                 >
                   Add client

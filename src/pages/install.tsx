@@ -1,18 +1,13 @@
-import {
-  ArrowSmallDownIcon,
-  ArrowSmallLeftIcon,
-  BackspaceIcon,
-} from "@heroicons/react/20/solid";
-import { invoke } from "@tauri-apps/api";
-import { open } from "@tauri-apps/api/shell";
-import { useContext, useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import Button from "../components/Button";
-import { AppContext } from "../components/Context";
-import { Mod } from "../types/Mod";
-import clsxm from "../utils/clsxm";
+import { ArrowSmallLeftIcon } from '@heroicons/react/20/solid';
+import { invoke } from '@tauri-apps/api';
+import { open } from '@tauri-apps/api/shell';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import Button from '../components/Button';
+import { AppContext } from '../components/Context';
+import { Mod } from '../types/Mod';
 
-const InstallMod = () => {
+function InstallMod() {
   const { mods, activeClient } = useContext(AppContext);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -20,30 +15,30 @@ const InstallMod = () => {
 
   const navigate = useNavigate();
 
-  const goBack = () => navigate("/");
-  const openRepo = () => open(activeMod?.repository || "");
+  const goBack = () => navigate('/');
+  const openRepo = () => open(activeMod?.repository || '');
 
   const install = async () => {
     console.log(activeClient?.id, activeMod?.id);
-    await invoke("install_mod", {
+    await invoke('install_mod', {
       modId: activeMod?.id,
       clientId: activeClient?.id,
     });
-    window.location.href = "/";
+    window.location.href = '/';
   };
 
   const uninstall = async () => {
     console.log(activeClient?.id, activeMod?.id);
-    await invoke("uninstall_mod", {
+    await invoke('uninstall_mod', {
       modId: activeMod?.id,
       clientId: activeClient?.id,
     });
-    window.location.href = "/";
+    window.location.href = '/';
   };
 
   const findMod = () => {
-    const mod = mods?.find((m) => m.id === searchParams.get("id"));
-    if (!mod) navigate("/");
+    const mod = mods?.find((m) => m.id === searchParams.get('id'));
+    if (!mod) navigate('/');
     setActiveMod(mod);
   };
 
@@ -54,7 +49,7 @@ const InstallMod = () => {
     <div className="space-y-8 animate__animated animate__fadeInLeft">
       <img
         src={activeMod?.content?.banner}
-        className={"w-full h-[300px] object-cover object-center"}
+        className="w-full h-[300px] object-cover object-center"
       />
 
       <div className="flex justify-center space-x-8 w-1/2">
@@ -66,7 +61,7 @@ const InstallMod = () => {
           <div>
             <h1>{activeMod?.name}</h1>
             <p className="text-gray-200 tracking-widest">
-              {activeMod?.author} • {activeMod?.version}
+              {activeMod?.author} •{activeMod?.version}
             </p>
           </div>
           <div className="space-x-4">
@@ -95,9 +90,9 @@ const InstallMod = () => {
       </div>
       <div className="px-16 space-y-8">
         <div className="flex flex-row">
-          {activeMod?.content?.media.map((media) => {
-            return <img src={media} className={"w-[128px] p-2"} />;
-          })}
+          {activeMod?.content?.media.map((media) => (
+            <img src={media} key={media} className="w-[128px] p-2" />
+          ))}
         </div>
         <div className="flex">
           <p>{activeMod?.longDescription}</p>
@@ -105,7 +100,10 @@ const InstallMod = () => {
         <div className="space-y-4">
           <div>
             <h3>Extra information</h3>
-            <p>Transparency information about {activeMod?.name}</p>
+            <p>
+              Transparency information about
+              {activeMod?.name}
+            </p>
           </div>
           {activeMod?.releaseDate && (
             <div>
@@ -129,7 +127,7 @@ const InstallMod = () => {
             <div>
               <h4>Content downloaded</h4>
               {activeMod?.files?.map((file) => (
-                <p>
+                <p key={file.id}>
                   {file.name} • {file.type}
                 </p>
               ))}
@@ -139,6 +137,6 @@ const InstallMod = () => {
       </div>
     </div>
   );
-};
+}
 
 export default InstallMod;
