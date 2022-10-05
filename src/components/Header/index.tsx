@@ -9,13 +9,17 @@ function Header() {
 
   const minimize = () => appWindow.minimize();
 
+  const home = () => navigate('/');
+
+  const account = () => navigate('/account');
+
   return (
     <div
-      className="flex justify-between pl-4 h-7 fixed z-50 bg-zinc-900 bg-opacity-20 backdrop-blur-xl rounded drop-shadow-lg w-full animate__animated animate__fadeInDown"
+      className="flex justify-between pl-4 h-7 fixed z-50 bg-zinc-900 bg-opacity-20 backdrop-blur-xl border-b border-neutral-700  rounded drop-shadow-lg w-full animate__animated animate__fadeInDown"
       data-tauri-drag-region
     >
       <div>
-        <h4 className="font-black" onClick={() => navigate('/')}>
+        <h4 className="font-black" onClick={home}>
           ABSTRACTIVE
         </h4>
       </div>
@@ -48,7 +52,7 @@ function Header() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M18 12H6" />
           </svg>
         </Button>
-        <Button>
+        <Button onClick={account}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

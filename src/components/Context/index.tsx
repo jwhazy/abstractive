@@ -17,6 +17,8 @@ interface DefaultContext {
   setActiveClient: (client: Client) => void;
   mods: Mod[];
   setMods: (mods: Mod[]) => void;
+  account: Account | undefined;
+  setAccount: (account: Account) => void;
 }
 
 const AppContext = createContext<Partial<DefaultContext>>({});
@@ -37,24 +39,37 @@ function AppProvider({ children }: Props) {
   const navigate = useNavigate();
 
   const start = async () => {
+    console.log('starting');
     const isSetup = await invoke('setup');
     if (!isSetup) {
+      console.log('no config nav...');
+
       navigate('/welcome');
-      return setLoading(false);
+      setLoading(false);
+      return;
     }
+
+    console.log('trying to find cinfig');
 
     const config: Config = JSON.parse(await invoke('get_config'));
     if (!config) throw new Error('Config is undefined');
 
+    console.log('trying to find active clinet');
     const active: Client | undefined = Object.values(config.clients).find(
       (a) => a.id === config.active
     );
 
+    console.log('getting mods from net');
+
     const workerMods: Mod[] = JSON.parse(await invoke('get_mods'));
+
+    console.log('setting vars');
 
     setMods(workerMods);
     setClients(config.clients);
     setActiveClient(active);
+
+    console.log('closing loading');
 
     setLoading(false);
   };
@@ -69,13 +84,17 @@ function AppProvider({ children }: Props) {
       setSetup,
       mods,
       setMods,
+      account,
+      setAccount,
     }),
-    [clients, activeClient, setup, mods]
+    [clients, activeClient, setup, mods, account]
   );
 
   useEffect(() => {
     start();
-  });
+    // Adding the start function just halts the app. Not sure why.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (loading) {
     return (

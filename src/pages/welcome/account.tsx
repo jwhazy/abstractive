@@ -4,7 +4,7 @@ import Button from '../../components/Button';
 function WelcomeAccount() {
   const navigate = useNavigate();
 
-  const login = () => navigate('/');
+  const login = () => navigate('https://localhost:3000/api/accounts/auth');
   const skip = () => navigate('/welcome/success');
 
   return (

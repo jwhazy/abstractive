@@ -1,21 +1,24 @@
+import { ButtonHTMLAttributes, HTMLProps } from 'react';
 import clsxm from '../utils/clsxm';
 
-export type Props = {
-  onClick?: () => void;
-  className?: string;
+type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
+  className?: string;
 };
 
-function Button(props: Props) {
-  const className = clsxm(
-    'ring ring-1 ring-zinc-600 text-white bg-gray-500 hover:text-white cursor-pointer mx-2 my-1 rounded-xl px-4 py-2 font-normal bg-opacity-10 hover:bg-opacity-70 shadow-xl transition',
-    props.className
-  );
-
+function Button({ children, ...props }: Props & HTMLProps<HTMLButtonElement>) {
   return (
-    <button className={className} onClick={props.onClick}>
-      {props.children}
+    <button
+      {...props}
+      type="button"
+      className={clsxm(
+        'rounded-xl bg-zinc-800 px-4 py-2 text-white ring-1 ring-zinc-600 transition-all hover:bg-zinc-600 hover:font-semibold',
+        props.className
+      )}
+    >
+      {children}
     </button>
   );
 }
+
 export default Button;

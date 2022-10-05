@@ -9,7 +9,9 @@ import { Mod } from '../types/Mod';
 
 function InstallMod() {
   const { mods, activeClient } = useContext(AppContext);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
+
+  const [settings, setSettings] = useState<boolean>();
 
   const [activeMod, setActiveMod] = useState<Mod>();
 
@@ -19,7 +21,6 @@ function InstallMod() {
   const openRepo = () => open(activeMod?.repository || '');
 
   const install = async () => {
-    console.log(activeClient?.id, activeMod?.id);
     await invoke('install_mod', {
       modId: activeMod?.id,
       clientId: activeClient?.id,
@@ -28,7 +29,6 @@ function InstallMod() {
   };
 
   const uninstall = async () => {
-    console.log(activeClient?.id, activeMod?.id);
     await invoke('uninstall_mod', {
       modId: activeMod?.id,
       clientId: activeClient?.id,
@@ -61,7 +61,7 @@ function InstallMod() {
           <div>
             <h1>{activeMod?.name}</h1>
             <p className="text-gray-200 tracking-widest">
-              {activeMod?.author} •{activeMod?.version}
+              {activeMod?.author} • {activeMod?.version}
             </p>
           </div>
           <div className="space-x-4">
@@ -90,8 +90,8 @@ function InstallMod() {
       </div>
       <div className="px-16 space-y-8">
         <div className="flex flex-row">
-          {activeMod?.content?.media.map((media) => (
-            <img src={media} key={media} className="w-[128px] p-2" />
+          {activeMod?.content?.media.map((media, index) => (
+            <img src={media} key={index.toString()} className="w-[128px] p-2" />
           ))}
         </div>
         <div className="flex">

@@ -4,9 +4,19 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use tauri::api::http::{header, ClientBuilder, HttpRequestBuilder};
-
+use serde;
+use serde::Deserialize;
+use serde::Serialize;
 use serde_json::Value;
+
+use tauri::api::http::{ClientBuilder, HttpRequestBuilder};
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct LoginResponse {
+    pub auth: bool,
+    pub message: String,
+}
 
 pub fn path() -> PathBuf {
     PathBuf::from(
@@ -24,6 +34,35 @@ pub fn exists(path: String) -> bool {
     let path = PathBuf::from(path);
 
     Path::exists(&path)
+}
+
+#[tauri::command]
+pub async fn login(token: String) -> LoginResponse {
+    let client = ClientBuilder::new().build().unwrap();
+
+    let response =
+        client.send(HttpRequestBuilder::new("GET", "null?code=".to_owned() + &token).unwrap());
+
+    let response = response.await.unwrap().read().await.unwrap();
+    let json: Value = serde_json::from_str(&response.data.to_string()).unwrap();
+    let mut config = read_config();
+
+    if json["accessToken"] != Value::Null {
+        config["account"]["accessToken"] = json["accessToken"].clone();
+        config["account"]["refreshToken"] = json["refreshToken"].clone();
+        config["account"]["id"] = json["id"].clone();
+        write_config(config);
+
+        return LoginResponse {
+            auth: true,
+            message: "Successfully logged in.".to_owned(),
+        };
+    } else {
+        return LoginResponse {
+            auth: false,
+            message: "Failed to log in.".to_owned(),
+        };
+    }
 }
 
 #[tauri::command]
@@ -65,6 +104,14 @@ pub fn read_config() -> Value {
     file.read_to_string(&mut contents).unwrap();
 
     serde_json::from_str(&contents).unwrap()
+}
+
+pub fn write_config(config: Value) {
+    std::fs::write(
+        path().join("config.json"),
+        serde_json::to_string_pretty(&config).unwrap(),
+    )
+    .unwrap();
 }
 
 #[tauri::command]
