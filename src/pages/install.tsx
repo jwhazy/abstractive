@@ -1,4 +1,4 @@
-import { ArrowSmallLeftIcon } from '@heroicons/react/20/solid';
+import { ArrowSmallLeftIcon } from '@heroicons/react/24/outline';
 import { invoke } from '@tauri-apps/api';
 import { open } from '@tauri-apps/api/shell';
 import { useContext, useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ function InstallMod() {
 
   const navigate = useNavigate();
 
-  const goBack = () => navigate('/');
+  const goBack = () => navigate(-1);
   const openRepo = () => open(activeMod?.repository || '');
 
   const install = async () => {

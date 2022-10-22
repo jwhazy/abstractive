@@ -1,5 +1,5 @@
 import { Transition } from '@headlessui/react';
-import { ChevronRightIcon } from '@heroicons/react/20/solid';
+import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Link from '../../components/Link';

@@ -12,7 +12,7 @@ function Button({ children, ...props }: Props & HTMLProps<HTMLButtonElement>) {
       {...props}
       type="button"
       className={clsxm(
-        'rounded-xl bg-zinc-800 px-4 py-2 text-white ring-1 ring-zinc-600 transition-all hover:bg-zinc-600 hover:font-semibold',
+        'rounded-xl bg-zinc-800 px-4 py-2 text-white ring-1 ring-zinc-600 transition-all hover:bg-zinc-600 hover:font-medium',
         props.className
       )}
     >

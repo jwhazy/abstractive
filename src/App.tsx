@@ -15,6 +15,7 @@ import LoginAccount from './pages/account/login';
 import Account from './pages/account';
 import Logout from './pages/account/logout';
 import Wrapper from './components/Wrapper';
+import AuthorPage from './pages/author';
 
 ReactDOM.createRoot(
   document.getElementById('abstractive') as HTMLElement
@@ -27,7 +28,7 @@ ReactDOM.createRoot(
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginAccount />} />
           <Route path="/logout" element={<Logout />} />
-          <Route path="/account" element={<Account />} />
+          <Route path="/account" element={<AuthorPage />} />
           <Route path="/add/client" element={<AddClient />} />
           <Route path="/install/mod" element={<InstallMod />} />
           <Route path="welcome" element={<Welcome />} />

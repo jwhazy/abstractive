@@ -14,7 +14,7 @@ function WelcomeSuccess() {
           <p>You can add more clients in the settings.</p>
         </div>
         <div>
-          <Button onClick={go} className="w-1/2">
+          <Button onClick={go} className="w-full">
             Get started
           </Button>
         </div>

@@ -1,7 +1,7 @@
 import { appWindow } from '@tauri-apps/api/window';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Fragment, useContext } from 'react';
-import { ChevronDownIcon, PlusIcon } from '@heroicons/react/20/solid';
+import { ChevronDownIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { Menu, Transition } from '@headlessui/react';
 import { invoke } from '@tauri-apps/api';
 import Button from './Button';
@@ -127,50 +127,46 @@ function Header() {
               </Button>
             </div>
 
-            <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none border-zinc-600 border">
-              <div className="py-1">
-                {clients
-                  ? Object.values(clients).map((client) => (
-                      <Menu.Item key={client.id}>
-                        {({ active }) => (
-                          <div className="py-1">
-                            <a
-                              href="#"
-                              onClick={() => {
-                                setActiveClient?.(client);
-                                invoke('set_active', { id: client.id });
-                              }}
-                              className={clsxm(
-                                active
-                                  ? ' bg-black bg-opacity-20'
-                                  : 'text-white',
-                                'block px-4 py-2 text-sm'
-                              )}
-                            >
-                              {client.name}
-                            </a>
-                          </div>
-                        )}
-                      </Menu.Item>
-                    ))
-                  : null}
-
-                <Menu.Item>
-                  {({ active }) => (
-                    <a
-                      href="#"
-                      key={0}
-                      onClick={() => navigate('/add/client')}
-                      className={clsxm(
-                        active ? ' bg-black bg-opacity-20' : 'text-white',
-                        'px-4 py-2 text-sm block w-full text-left'
+            <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-xl shadow-lg ring-1 bg-zinc-800 ring-black ring-opacity-5 focus:outline-none border-zinc-600 border">
+              {clients
+                ? Object.values(clients).map((client) => (
+                    <Menu.Item key={client.id}>
+                      {({ active }) => (
+                        <div className="py-1">
+                          <a
+                            href="#"
+                            onClick={() => {
+                              setActiveClient?.(client);
+                              invoke('set_active', { id: client.id });
+                            }}
+                            className={clsxm(
+                              active ? ' bg-black bg-opacity-20' : 'text-white',
+                              'block px-4 py-2 text-sm'
+                            )}
+                          >
+                            {client.name}
+                          </a>
+                        </div>
                       )}
-                    >
-                      Add client
-                    </a>
-                  )}
-                </Menu.Item>
-              </div>
+                    </Menu.Item>
+                  ))
+                : null}
+
+              <Menu.Item>
+                {({ active }) => (
+                  <a
+                    href="#"
+                    key={0}
+                    onClick={() => navigate('/add/client')}
+                    className={clsxm(
+                      active ? ' bg-black bg-opacity-20' : 'text-white',
+                      'px-4 py-2 text-sm block w-full text-left'
+                    )}
+                  >
+                    Add client
+                  </a>
+                )}
+              </Menu.Item>
             </Menu.Items>
           </Menu>
         ) : (

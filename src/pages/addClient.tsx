@@ -2,10 +2,12 @@ import { dialog, invoke } from '@tauri-apps/api';
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Combobox } from '@headlessui/react';
+import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline';
 import Button from '../components/Button';
 import versions from '../utils/versions';
 import { AppContext } from '../components/Context';
 import { Version } from '../types/Version';
+import Link from '../components/Link';
 
 function AddClient() {
   const [clientName, setClientName] = useState('');
@@ -122,12 +124,15 @@ function AddClient() {
           </div>
           <div className="space-x-2">
             {error && <p className="text-red-400">{error}</p>}
-            <Button className="ml-0" onClick={addClient}>
-              Add client
-            </Button>
-            <Button className="ml-0" onClick={goBack}>
-              Go back
-            </Button>
+            <div className="ml-0 pt-2 flex justify-between w-full">
+              <Link onClick={goBack}>
+                <ChevronLeftIcon className="h-6 w-6" /> Go back
+              </Link>
+
+              <Link onClick={addClient}>
+                Add client <ChevronRightIcon className="h-6 w-6" />
+              </Link>
+            </div>
           </div>
         </div>
       </div>

@@ -115,8 +115,9 @@ function AppProvider({ children }: Props) {
   if (loading) {
     return (
       <div className="flex h-[90vh] justify-center">
-        <div className="m-auto">
-          <Spinner />
+        <div className="m-auto flex space-x-8">
+          <h1 className="font-black">LOADING...</h1>
+          <Spinner className="m-0 bg-white w-10 h-10" />
         </div>
       </div>
     );

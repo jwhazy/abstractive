@@ -1,12 +1,13 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment, useContext, useEffect } from 'react';
-import { ChevronDownIcon, PlusIcon } from '@heroicons/react/20/solid';
+import { ChevronDownIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import { invoke } from '@tauri-apps/api';
 import { AppContext } from '../components/Context';
 import ModLarge from '../components/ModLarge';
 import clsxm from '../utils/clsxm';
 import ModMedium from '../components/Mod';
+import ModRow from '../components/ModRow';
 
 function Home() {
   const { clients, activeClient, mods, setActiveClient, account } =
@@ -52,10 +53,10 @@ function Home() {
         </div>
         <div className="my-4">
           <h3 className="font-black">ALL MODS</h3>
-          <div className="flex flex-wrap">
+          <div className="flex space-y-1 flex-wrap">
             {mods?.map((mod) => {
               if (!activeClient?.mods.find((m) => m.id === mod.id)) {
-                return <ModMedium key={mod.id} mod={mod} />;
+                return <ModRow key={mod.id} mod={mod} />;
               }
             })}
           </div>
