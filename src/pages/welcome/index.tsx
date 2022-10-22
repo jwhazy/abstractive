@@ -1,5 +1,8 @@
+import { Transition } from '@headlessui/react';
+import { ChevronRightIcon } from '@heroicons/react/20/solid';
+import { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../components/Button';
+import Link from '../../components/Link';
 
 function Welcome() {
   const navigate = useNavigate();
@@ -7,16 +10,16 @@ function Welcome() {
   const start = () => navigate('/welcome/client');
 
   return (
-    <div className="flex justify-center h-[90vh]">
-      <div className="m-auto text-center space-y-4">
-        <div className="animate__animated animate__fadeInDown">
-          <h1>Welcome to Abstractive</h1>
-          <p>We&apos;re glad you&apos;re here. Let&apos;s get started.</p>
+    <div className="flex justify-center h-[75vh]">
+      <div className="m-auto text-center space-y-4 animate__animated animate__fadeInUp">
+        <div>
+          <h2 className="font-black">WELCOME TO</h2>
+          <h1 className="text-6xl font-black">ABSTRACTIVE</h1>
         </div>
-        <div className="animate__animated animate__fadeInUp">
-          <Button onClick={start} className="w-1/2">
-            Start
-          </Button>
+        <div className="flex justify-end">
+          <Link onClick={start}>
+            Get started <ChevronRightIcon className="h-6 w-6" />
+          </Link>
         </div>
       </div>
     </div>

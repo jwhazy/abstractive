@@ -19,7 +19,7 @@ function ModLarge(props: Props) {
   return (
     <div
       onClick={() => navigate(`/install/mod?id=${modData?.id}`)}
-      className="ml-2 flex-col m-3 w-max cursor-pointer border bg-opacity-10 hover:bg-opacity-25 bg-black text-white transition border-gray-700 placeholder-gray-400 hover:outline-none hover:ring-1 hover:ring-gray-300 hover:ring-opacity-50 shadow-sm disabled:text-gray-500 mt-1 flex items-center rounded-3xl"
+      className="ml-0 flex-col m-3 w-max cursor-pointer bg-opacity-0 transition-all hover:bg-opacity-100 bg-zinc-600 text-white transitionshadow-sm mt-1 flex items-center rounded-3xl border border-zinc-600"
     >
       <img
         src={modData?.content?.banner}

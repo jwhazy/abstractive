@@ -18,7 +18,7 @@ interface DefaultContext {
   mods: Mod[];
   setMods: (mods: Mod[]) => void;
   account: Account | undefined;
-  setAccount: (account: Account) => void;
+  setAccount: (account: Account | undefined) => void;
 }
 
 const AppContext = createContext<Partial<DefaultContext>>({});
@@ -52,6 +52,7 @@ function AppProvider({ children }: Props) {
     console.log('trying to find cinfig');
 
     const config: Config = JSON.parse(await invoke('get_config'));
+
     if (!config) throw new Error('Config is undefined');
 
     console.log('trying to find active clinet');
@@ -68,6 +69,21 @@ function AppProvider({ children }: Props) {
     setMods(workerMods);
     setClients(config.clients);
     setActiveClient(active);
+
+    console.log('trying to find account');
+
+    if (config.account?.accessToken || config.account?.refreshToken)
+      setAccount(
+        JSON.parse(
+          await invoke('verify', {
+            accessToken: config.account.accessToken,
+            refreshToken: config.account.refreshToken,
+            id: config.account.id,
+          })
+        )
+      );
+
+    console.log(account);
 
     console.log('closing loading');
 

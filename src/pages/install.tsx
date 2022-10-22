@@ -46,20 +46,20 @@ function InstallMod() {
     findMod();
   });
   return (
-    <div className="space-y-8 animate__animated animate__fadeInLeft">
+    <div className="space-y-8 -mt-16">
       <img
         src={activeMod?.content?.banner}
-        className="w-full h-[300px] object-cover object-center"
+        className="w-full h-[400px] object-cover object-center animate__animated animate__fadeInDown"
       />
 
-      <div className="flex justify-center space-x-8 w-1/2">
+      <div className="flex justify-center space-x-8 w-1/2 animate__animated animate__fadeInUp">
         <div onClick={goBack}>
-          <ArrowSmallLeftIcon className="w-8 h-8" />
+          <ArrowSmallLeftIcon className="w-8 h-8 cursor-pointer" />
         </div>
         <img src={activeMod?.content?.icon} className="rounded-xl w-32 h-32" />
-        <div className="flex flex-col justify-around">
+        <div className="flex flex-col justify-around ">
           <div>
-            <h1>{activeMod?.name}</h1>
+            <h1 className="font-black">{activeMod?.name?.toUpperCase()}</h1>
             <p className="text-gray-200 tracking-widest">
               {activeMod?.author} • {activeMod?.version}
             </p>
@@ -88,9 +88,10 @@ function InstallMod() {
           </div>
         </div>
       </div>
-      <div className="px-16 space-y-8">
+      <div className="px-16 space-y-8 animate__animated animate__fadeInUp">
         <div className="flex flex-row">
           {activeMod?.content?.media.map((media, index) => (
+            // eslint-disable-next-line react/no-array-index-key
             <img src={media} key={index.toString()} className="w-[128px] p-2" />
           ))}
         </div>

@@ -1,14 +1,19 @@
 import { ReactNode } from 'react';
+import clsxm from '../../utils/clsxm';
 
 type Props = {
   children: ReactNode;
   onClick?: () => void;
+  className?: string;
 };
 
 function TitlebarButton(props: Props) {
   return (
     <div
-      className="bg-black bg-opacity-0 hover:bg-opacity-50 px-4 text-center h-full flex items-center transition cursor-pointer"
+      className={clsxm(
+        'bg-zinc-600 bg-opacity-0 hover:bg-opacity-100 px-4 text-center h-12 flex items-center transition cursor-pointer',
+        props.className
+      )}
       onClick={props.onClick}
     >
       {props.children}

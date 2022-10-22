@@ -7,13 +7,13 @@ function WelcomeSuccess() {
   const go = () => (window.location.href = '/');
 
   return (
-    <div className="flex justify-center h-[90vh]">
-      <div className="m-auto text-center space-y-4">
-        <div className="animate__animated animate__fadeInDown">
+    <div className="flex justify-center h-[75vh]">
+      <div className="m-auto text-center space-y-4 animate__animated animate__fadeInUp">
+        <div>
           <h1>Setup complete! 🎉</h1>
           <p>You can add more clients in the settings.</p>
         </div>
-        <div className="animate__animated animate__fadeInUp">
+        <div>
           <Button onClick={go} className="w-1/2">
             Get started
           </Button>

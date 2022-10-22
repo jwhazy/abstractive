@@ -22,7 +22,9 @@ fn main() {
             utils::get_mods,
             utils::install_mod,
             utils::uninstall_mod,
-            utils::login
+            utils::login,
+            utils::verify,
+            utils::logout
         ])
         .run(tauri::generate_context!())
         .expect("error while running abstractive");

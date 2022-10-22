@@ -1,16 +1,20 @@
 import { dialog, invoke } from '@tauri-apps/api';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Combobox } from '@headlessui/react';
 import Button from '../components/Button';
 import versions from '../utils/versions';
+import { AppContext } from '../components/Context';
+import { Version } from '../types/Version';
 
 function AddClient() {
   const [clientName, setClientName] = useState('');
   const [clientDirectory, setClientDirectory] = useState('');
-  const [clientVersion, setClientVersion] = useState('');
+  const [clientVersion, setClientVersion] = useState<Version>();
   const [query, setQuery] = useState('');
   const [error, setError] = useState('');
+
+  const { clients, setClients } = useContext(AppContext);
 
   const filteredVersions =
     query === ''
@@ -29,12 +33,27 @@ function AddClient() {
 
     if (!exists) return setError('Directory does not exist.');
 
+    const id = crypto.randomUUID();
+
     invoke('add_client', {
       name: clientName,
       directory: clientDirectory,
       version: clientVersion,
-      id: crypto.randomUUID(),
-    }).then(() => (window.location.href = '/'));
+      id,
+    }).then(() => {
+      if (!clients || !setClients)
+        setClients?.({
+          ...clients,
+          id: {
+            id,
+            directory: clientDirectory,
+            version: clientVersion,
+            name: clientName,
+            mods: [],
+          },
+        });
+      navigate('/welcome/account');
+    });
   };
 
   const getDirectory = () => {
@@ -46,12 +65,12 @@ function AddClient() {
   };
 
   return (
-    <div className="flex h-[90vh]">
-      <div className="m-auto space-y-4 w-1/2">
-        <div className="animate__animated animate__fadeInUp">
+    <div className="flex h-[75vh] overflow-hidden">
+      <div className="m-auto space-y-4 w-1/2 animate__animated animate__fadeInUp">
+        <div className="space-y-4">
           <div>
-            <h1>Add another client</h1>
-            <p>Make sure you select the folder with FortniteGame and Engine</p>
+            <h2 className="font-black">LET&apos;S ADD A CLIENT</h2>
+            <p>Make sure you select the folder with FortniteGame and Engine.</p>
           </div>
           <div className="space-y-2">
             <input
@@ -100,7 +119,8 @@ function AddClient() {
                 ...
               </Button>
             </div>
-
+          </div>
+          <div className="space-x-2">
             {error && <p className="text-red-400">{error}</p>}
             <Button className="ml-0" onClick={addClient}>
               Add client

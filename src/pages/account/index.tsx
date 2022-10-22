@@ -1,69 +1,51 @@
-import { open } from '@tauri-apps/api/shell';
-import { invoke } from '@tauri-apps/api/tauri';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import Button from '../../components/Button';
-import Input from '../../components/Input';
+import { AppContext } from '../../components/Context';
 
-function LoginAccount() {
+function Account() {
+  const { account } = useContext(AppContext);
+
   const navigate = useNavigate();
-  const [code, setCode] = useState<string>();
-  const [codeVisible, setCodeVisible] = useState<boolean>(false);
-  const [error, setError] = useState<string>();
-
-  const openBrowser = () => {
-    open('null');
-    setCodeVisible(true);
-  };
-
-  const login = () => {
-    invoke('login', { token: code }).then((r) => {
-      const res = r as { auth: boolean; error?: string };
-
-      if (!res.auth) {
-        setError(res.error || 'Something went wrong. Please try again.');
-        return;
-      }
-
-      window.location.href = '/';
-    });
-  };
-
-  const back = () => navigate('/');
 
   return (
-    <div className="flex h-[90vh]">
-      <div className="m-auto space-y-4 w-1/2 animate__animated animate__fadeInUp">
-        <div>
-          <h1>Abstractive Account</h1>
-          <p>To upload and edit mods, you will need to log in.</p>
-        </div>
-        <p className="font-bold text-red-800">
-          DO NOT SHARE THIS CODE WITH ANYONE.
-        </p>
-        <div>
-          <p>We have to open your browser to authenticate you with Discord.</p>
-        </div>
-
-        <div className="flex flex-col space-y-2">
-          {codeVisible && (
-            <Input
-              id="name"
-              type="text"
-              name="name"
-              placeholder="Authorization code"
-              value={code}
-              onChange={(e) => {
-                setCode((e.target as HTMLInputElement).value);
-                setError('');
-              }}
-            />
-          )}
-          <div className="space-x-2">
-            <Button className="ml-0" onClick={code ? login : openBrowser}>
-              {code ? 'Log in' : 'Continue'}
-            </Button>
-            <Button onClick={back}>Go back</Button>
+    <div className="flex h-[80vh] justify-center lg:justify-start">
+      <div className="pt-48 lg:m-48 lg:mx-64 lg:pt-0">
+        <div className="animate__animated animate__fadeInUp space-y-4">
+          <div className=" flex flex-col items-center space-y-2 lg:flex-row lg:space-x-10 lg:space-y-0">
+            <div>
+              <img
+                src={
+                  account?.avatar ||
+                  'https://cdn.jacksta.dev/assets/newUser.png'
+                }
+                width={150}
+                height={150}
+                className="rounded-full"
+              />
+            </div>
+            <div className="flex flex-col justify-center space-y-2 text-center lg:text-start">
+              <div>
+                <h1 className="text-gray-200 font-black">
+                  WELCOME BACK,
+                  <a className="text-white">
+                    {' '}
+                    {account?.username.toUpperCase()}
+                  </a>
+                  .
+                </h1>
+                <p className="font-medium">What can we help you with today?</p>
+              </div>
+              <div>
+                <Button
+                  className="ml-0 mt-2 "
+                  onClick={() => navigate('/logout')}
+                >
+                  Log out
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -71,4 +53,4 @@ function LoginAccount() {
   );
 }
 
-export default LoginAccount;
+export default Account;

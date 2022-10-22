@@ -1,7 +1,9 @@
 export type Account = {
-  discordId: string;
-  username?: string;
-  email?: string;
+  id: string;
+  username: string;
+  email: string;
+  avatar: string;
+  discriminator: string;
   accessToken: string;
   refreshToken: string;
 };

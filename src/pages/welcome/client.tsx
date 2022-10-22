@@ -2,8 +2,10 @@ import { dialog, invoke } from '@tauri-apps/api';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Combobox } from '@headlessui/react';
+import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/20/solid';
 import Button from '../../components/Button';
 import versions from '../../utils/versions';
+import Link from '../../components/Link';
 
 function WelcomeClient() {
   const [clientName, setClientName] = useState('');
@@ -18,6 +20,8 @@ function WelcomeClient() {
       : versions.filter((v) => v.toLowerCase().startsWith(query.toLowerCase()));
 
   const navigate = useNavigate();
+
+  const goBack = () => navigate(-1);
 
   const addClient = async () => {
     if (!clientName || !clientDirectory)
@@ -44,13 +48,13 @@ function WelcomeClient() {
   };
 
   return (
-    <div className="flex h-[90vh]">
-      <div className="m-auto space-y-4 w-1/2">
-        <div className="animate__animated animate__fadeInDown">
-          <h1>Let&apos;s add a client</h1>
-          <p>Make sure you select the folder with FortniteGame and Engine</p>
+    <div className="flex h-[75vh] overflow-hidden">
+      <div className="m-auto space-y-4 w-1/2 animate__animated animate__fadeInUp">
+        <div>
+          <h2 className="font-black">LET&apos;S ADD A CLIENT</h2>
+          <p>Make sure you select the folder with FortniteGame and Engine.</p>
         </div>
-        <div className="animate__animated animate__fadeInUp space-y-2">
+        <div className="space-y-2">
           <input
             id="name"
             type="text"
@@ -99,9 +103,15 @@ function WelcomeClient() {
           </div>
 
           {error && <p className="text-red-400">{error}</p>}
-          <Button className="ml-0" onClick={addClient}>
-            Add client
-          </Button>
+          <div className="ml-0 pt-2 flex justify-between w-full">
+            <Link onClick={goBack}>
+              <ChevronLeftIcon className="h-6 w-6" /> Go back
+            </Link>
+
+            <Link onClick={addClient}>
+              Add client <ChevronRightIcon className="h-6 w-6" />
+            </Link>
+          </div>
         </div>
       </div>
     </div>
