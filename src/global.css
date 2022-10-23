@@ -78,7 +78,13 @@
     @apply select-none;
     @apply pointer-events-none;
   }
+
+  /* We will see if this about this. For now we just aren't using a scroll wheel */
   ::-webkit-scrollbar {
+    width: 0px;
+  }
+
+  /* ::-webkit-scrollbar {
     width: 10px;
   }
 
@@ -89,7 +95,7 @@
     @apply bg-[#121214];
     @apply rounded-b-xl;
     @apply rounded-t-xl;
-  }
+  } */
 
   @-webkit-keyframes sk-rotateplane {
     0% {

@@ -1,18 +1,14 @@
 import {
+  ArrowRightOnRectangleIcon,
   ArrowSmallLeftIcon,
-  ArrowTopRightOnSquareIcon,
   Cog8ToothIcon,
   PencilIcon,
 } from '@heroicons/react/24/outline';
-import { invoke } from '@tauri-apps/api';
-import { open } from '@tauri-apps/api/shell';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import Button from '../components/Button';
 import { AppContext } from '../components/Context';
 import Link from '../components/Link';
 import ModRow from '../components/ModRow';
-import { Mod } from '../types/Mod';
 import Profile from '../types/Profile';
 
 function AuthorPage() {
@@ -25,7 +21,9 @@ function AuthorPage() {
 
   const navigate = useNavigate();
 
-  const goBack = () => navigate('/');
+  const logout = () => navigate('/logout');
+
+  const goBack = () => navigate(-1);
 
   useEffect(() => {
     setAuthor({
@@ -67,9 +65,6 @@ function AuthorPage() {
           <div>
             <div>
               <h1 className="font-black">{author?.username?.toUpperCase()}</h1>
-              {/* <p className="text-gray-200 tracking-widest">
-              {activeMod?.author} • {activeMod?.version}
-            </p> */}
             </div>
             <div className="space-x-4 flex">
               <div>
@@ -92,7 +87,10 @@ function AuthorPage() {
                   <Cog8ToothIcon className="text-white h-6 w-6" />
                 </Link>
                 <Link>
-                  <ArrowTopRightOnSquareIcon className="text-white h-6 w-6" />
+                  <ArrowRightOnRectangleIcon
+                    className="text-white h-6 w-6"
+                    onClick={logout}
+                  />
                 </Link>
               </>
             ) : null}

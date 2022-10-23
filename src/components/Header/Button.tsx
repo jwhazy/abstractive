@@ -11,7 +11,7 @@ function TitlebarButton(props: Props) {
   return (
     <div
       className={clsxm(
-        'bg-zinc-600 bg-opacity-0 hover:bg-opacity-100 px-4 text-center h-12 flex items-center transition cursor-pointer',
+        'bg-zinc-800 bg-opacity-0 hover:bg-opacity-50 px-4 text-center h-12 flex items-center transition font-medium cursor-pointer',
         props.className
       )}
       onClick={props.onClick}

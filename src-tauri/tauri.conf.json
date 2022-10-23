@@ -59,8 +59,19 @@
         "resizable": true,
         "title": "Abstractive",
         "width": 1240,
-        "decorations": false
-
+        "decorations": false,
+        "transparent": true,
+        "visible": false
+      },
+      {
+        "width": 1240,
+        "height": 660,
+        "decorations": false,
+        "url": "splashscreen.html",
+        "label": "splashscreen",
+        "resizable": false,
+        "fullscreen": false,
+        "title": "Abstractive is loading..."
       }
     ]
   }

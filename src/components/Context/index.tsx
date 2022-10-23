@@ -2,6 +2,7 @@
 import { createContext, ReactNode, useMemo, useState, useEffect } from 'react';
 import { invoke } from '@tauri-apps/api';
 import { useNavigate } from 'react-router-dom';
+import { info, warn } from 'tauri-plugin-log-api';
 import { Client } from '../../types/Client';
 import { Config } from '../../types/Config';
 import { Mod } from '../../types/Mod';
@@ -39,55 +40,58 @@ function AppProvider({ children }: Props) {
   const navigate = useNavigate();
 
   const start = async () => {
-    console.log('starting');
+    info('Abstractive frontend starting...');
     const isSetup = await invoke('setup');
     if (!isSetup) {
-      console.log('no config nav...');
+      warn('No config found, redirecting to setup.');
 
       navigate('/welcome');
       setLoading(false);
+      invoke('close_splashscreen');
       return;
     }
 
-    console.log('trying to find cinfig');
+    info('Trying to find config');
 
     const config: Config = JSON.parse(await invoke('get_config'));
 
-    if (!config) throw new Error('Config is undefined');
+    if (!config) throw new Error('Config is undefined - redirecting to setup');
 
-    console.log('trying to find active clinet');
+    info('Config found, setting up - trying to set client');
     const active: Client | undefined = Object.values(config.clients).find(
       (a) => a.id === config.active
     );
 
-    console.log('getting mods from net');
+    info('Client found - getting mods from worker.');
 
     const workerMods: Mod[] = JSON.parse(await invoke('get_mods'));
 
-    console.log('setting vars');
+    info('Mods fetched. Setting state.');
 
     setMods(workerMods);
     setClients(config.clients);
     setActiveClient(active);
 
-    console.log('trying to find account');
+    info('Trying to find account.');
 
-    if (config.account?.accessToken || config.account?.refreshToken)
-      setAccount(
-        JSON.parse(
-          await invoke('verify', {
-            accessToken: config.account.accessToken,
-            refreshToken: config.account.refreshToken,
-            id: config.account.id,
-          })
-        )
+    if (config.account?.accessToken || config.account?.refreshToken) {
+      const req = JSON.parse(
+        await invoke('verify', {
+          accessToken: config.account.accessToken,
+          refreshToken: config.account.refreshToken,
+          id: config.account.id,
+        })
       );
 
-    console.log(account);
+      if (req.accessToken && req.refreshToken && req.id) {
+        setAccount(req);
+      }
+    }
 
-    console.log('closing loading');
+    info('Closing loading.');
 
     setLoading(false);
+    invoke('close_splashscreen');
   };
 
   const value = useMemo(

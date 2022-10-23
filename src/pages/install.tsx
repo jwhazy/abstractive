@@ -1,17 +1,28 @@
-import { ArrowSmallLeftIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowSmallLeftIcon,
+  CodeBracketIcon,
+  Cog8ToothIcon,
+  FlagIcon,
+  PlusCircleIcon,
+} from '@heroicons/react/24/outline';
+
+import { CheckCircleIcon } from '@heroicons/react/24/solid';
+
 import { invoke } from '@tauri-apps/api';
 import { open } from '@tauri-apps/api/shell';
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import Button from '../components/Button';
+import {
+  Link as DOMLink,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 import { AppContext } from '../components/Context';
+import Link from '../components/Link';
 import { Mod } from '../types/Mod';
 
 function InstallMod() {
   const { mods, activeClient } = useContext(AppContext);
   const [searchParams] = useSearchParams();
-
-  const [settings, setSettings] = useState<boolean>();
 
   const [activeMod, setActiveMod] = useState<Mod>();
 
@@ -61,29 +72,45 @@ function InstallMod() {
           <div>
             <h1 className="font-black">{activeMod?.name?.toUpperCase()}</h1>
             <p className="text-gray-200 tracking-widest">
-              {activeMod?.author} • {activeMod?.version}
+              <DOMLink to={`/account?id=${activeMod?.authorId}`}>
+                {activeMod?.author}
+              </DOMLink>{' '}
+              • {activeMod?.version}
             </p>
           </div>
-          <div className="space-x-4">
+          <div className="space-x-2 flex">
             {!activeClient?.mods?.find((m) => m.id === activeMod?.id) ? (
-              <Button className="m-0" onClick={install}>
-                Install
-              </Button>
+              <Link>
+                <PlusCircleIcon
+                  className="text-white h-9 w-9"
+                  onClick={install}
+                />
+              </Link>
             ) : (
-              <Button className="m-0" onClick={uninstall}>
-                Uninstall
-              </Button>
+              <Link>
+                <CheckCircleIcon
+                  className="text-white h-9 w-9"
+                  onClick={uninstall}
+                />
+              </Link>
             )}
             {!activeClient?.mods?.find((m) => m.id === activeMod?.id) ? (
-              <Button className="m-0">Report</Button>
+              <Link>
+                <FlagIcon className="text-white h-9 w-9" />
+              </Link>
             ) : (
-              <Button className="m-0">Settings</Button>
+              <Link>
+                <Cog8ToothIcon className="text-white h-9 w-9" />
+              </Link>
             )}
 
             {activeMod?.repository ? (
-              <Button className="m-0" onClick={openRepo}>
-                Source code
-              </Button>
+              <Link>
+                <CodeBracketIcon
+                  className="text-white h-9 w-9"
+                  onClick={openRepo}
+                />
+              </Link>
             ) : null}
           </div>
         </div>
@@ -100,38 +127,40 @@ function InstallMod() {
         </div>
         <div className="space-y-4">
           <div>
-            <h3>Extra information</h3>
-            <p>
-              Transparency information about
-              {activeMod?.name}
-            </p>
+            <h2 className="font-black">EXTRA INFORMATION</h2>
+            <p>Transparency information about {activeMod?.name}</p>
           </div>
           {activeMod?.releaseDate && (
             <div>
-              <h4>Release date</h4>
+              <h3>Release date</h3>
               <p>{activeMod?.releaseDate}</p>
             </div>
           )}
           {activeMod?.lastUpdated && (
             <div>
-              <h4>Last updated</h4>
+              <h3>Last updated</h3>
               <p>{activeMod?.lastUpdated}</p>
             </div>
           )}
           {activeMod?.previousVersions && (
             <div>
-              <h4>Previously available versions</h4>
+              <h3>Previously available versions</h3>
               <p>{activeMod?.previousVersions}</p>
             </div>
           )}
           {activeMod?.files && (
             <div>
-              <h4>Content downloaded</h4>
-              {activeMod?.files?.map((file) => (
-                <p key={file.id}>
-                  {file.name} • {file.type}
-                </p>
-              ))}
+              <h3>Content downloaded</h3>
+              <h4>Paks</h4>
+              {activeMod?.files?.map((file) => {
+                if (file.type === 'Pak')
+                  return <p key={file.id}>{file.name}</p>;
+              })}
+              <h4>Signatures</h4>
+              {activeMod?.files?.map((file) => {
+                if (file.type === 'Sig')
+                  return <p key={file.id}>{file.name}</p>;
+              })}
             </div>
           )}
         </div>

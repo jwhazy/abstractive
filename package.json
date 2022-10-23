@@ -15,7 +15,8 @@
     "@tauri-apps/api": "^1.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "6"
+    "react-router-dom": "6",
+    "tauri-plugin-log-api": "github:tauri-apps/tauri-plugin-log#dev"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",

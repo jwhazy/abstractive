@@ -1,8 +1,8 @@
 import { appWindow } from '@tauri-apps/api/window';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Fragment, useContext } from 'react';
+import { useContext } from 'react';
 import { ChevronDownIcon, PlusIcon } from '@heroicons/react/24/outline';
-import { Menu, Transition } from '@headlessui/react';
+import { Menu } from '@headlessui/react';
 import { invoke } from '@tauri-apps/api';
 import Button from './Button';
 import { AppContext } from '../Context';
@@ -53,15 +53,15 @@ function Header() {
 
   return (
     <div
-      className="flex justify-between pl-4 h-12 fixed z-50 bg-zinc-900 bg-opacity-20 backdrop-blur-xl border-b border-neutral-700  rounded drop-shadow-lg w-full items-center animate__animated animate__fadeIn"
+      className="flex justify-between pl-4 h-12 fixed z-50 bg-zinc-900 bg-opacity-20 backdrop-blur-lg drop-shadow-lg w-full items-center animate__animated animate__fadeIn"
       data-tauri-drag-region
     >
-      <div className="animate__animated animate__fadeInDown">
+      <div>
         <h3 className="font-black cursor-pointer" onClick={home}>
           ABSTRACTIVE
         </h3>
       </div>
-      <div className="flex flex-row-reverse items-center text-center animate__animated animate__fadeInDown">
+      <div className="flex flex-row-reverse items-center text-center">
         <Button onClick={close}>
           <svg
             xmlns="http://www.w3.org/2000/svg"

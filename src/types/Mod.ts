@@ -15,6 +15,7 @@ export type Mod = {
   lastUpdated?: string;
   previousVersions?: string[];
   author?: string;
+  authorId: string;
   contributors?: string[];
   repository?: string;
 };
