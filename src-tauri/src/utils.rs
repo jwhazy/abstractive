@@ -9,7 +9,10 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
 
-use tauri::api::http::{ClientBuilder, HttpRequestBuilder};
+use tauri::{
+    api::http::{ClientBuilder, HttpRequestBuilder},
+    Manager,
+};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -37,11 +40,42 @@ pub fn exists(path: String) -> bool {
 }
 
 #[tauri::command]
+pub async fn verify(access_token: String, refresh_token: String, id: String) -> String {
+    let client = ClientBuilder::new().build().unwrap();
+
+    let response = client.send(
+        HttpRequestBuilder::new(
+            "POST",
+            "http://localhost:3000/api/v1/accounts/verify".to_owned(),
+        )
+        .unwrap()
+        .header("Content-Type", "application/json")
+        .unwrap()
+        .body(tauri::api::http::Body::Json(serde_json::json!({
+            "accessToken": access_token,
+            "refreshToken": refresh_token,
+            "id": id,
+            "type": "abstractiveClient"
+        }))),
+    );
+
+    let response = response.await.unwrap().read().await.unwrap();
+
+    response.data.to_string()
+}
+
+#[tauri::command]
 pub async fn login(token: String) -> LoginResponse {
     let client = ClientBuilder::new().build().unwrap();
 
-    let response =
-        client.send(HttpRequestBuilder::new("GET", "null?code=".to_owned() + &token).unwrap());
+    let response = client.send(
+        HttpRequestBuilder::new(
+            "GET",
+            "http://localhost:3000/api/v1/accounts/abstractive/client/auth?code=".to_owned()
+                + &token,
+        )
+        .unwrap(),
+    );
 
     let response = response.await.unwrap().read().await.unwrap();
     let json: Value = serde_json::from_str(&response.data.to_string()).unwrap();
@@ -62,6 +96,40 @@ pub async fn login(token: String) -> LoginResponse {
             auth: false,
             message: "Failed to log in.".to_owned(),
         };
+    }
+}
+
+#[tauri::command]
+pub async fn logout(access_token: String, refresh_token: String, id: String) -> bool {
+    let client = ClientBuilder::new().build().unwrap();
+
+    let response = client.send(
+        HttpRequestBuilder::new(
+            "POST",
+            "http://localhost:3000/api/v1/accounts/logout".to_owned(),
+        )
+        .unwrap()
+        .header("Content-Type", "application/json")
+        .unwrap()
+        .body(tauri::api::http::Body::Json(serde_json::json!({
+            "accessToken": access_token,
+            "refreshToken": refresh_token,
+            "id": id,
+            "type": "abstractiveClient"
+        }))),
+    );
+
+    let response = response.await.unwrap().read().await.unwrap();
+
+    if response.status != 200 {
+        return false;
+    } else {
+        let mut config = read_config();
+        config["account"]["accessToken"] = Value::Null;
+        config["account"]["refreshToken"] = Value::Null;
+        config["account"]["id"] = Value::Null;
+        write_config(config);
+        return true;
     }
 }
 
@@ -132,6 +200,16 @@ pub fn set_active(id: String) -> bool {
 #[tauri::command]
 pub fn get_config() -> String {
     serde_json::to_string(&read_config()).unwrap()
+}
+
+#[tauri::command]
+pub async fn close_splashscreen(window: tauri::Window) {
+    // Close splashscreen
+    if let Some(splashscreen) = window.get_window("splashscreen") {
+        splashscreen.close().unwrap();
+    }
+    // Show main window
+    window.get_window("main").unwrap().show().unwrap();
 }
 
 #[tauri::command]
