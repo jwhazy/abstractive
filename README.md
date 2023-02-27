@@ -1,3 +1,2 @@
 # abstractive
-
-In-development Fortnite mod marketplace.
+Discontinued Fortnite mod marketplace.
